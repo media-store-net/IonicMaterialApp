@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Materialanforderung-App</title>
+    <link rel="stylesheet" href="./css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <script src="./js/jquery-2.1.4.min.js"></script>
+    <script src="./js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="./js/main.js"></script>
+
+</head>
+<body>
+<div data-role="page" id="liste">
+    <div data-role="popup" id="singleListView">
+
+        <div class="ui-corner-all custom-corners">
+              
+            <form id="addListItem">
+                <h3 class="text-center">Neues Material</h3>
+                <label for="newItem">Bezeichnung</label>
+                <input type="text" name="newItem" id="newItem" value="">
+                <label for="anzahl">Anazhl</label>
+                <input type="range" name="anzahl" id="anzahl" value="10" min="0" max="50" step="1" data-highlight="true">
+
+                <input type="submit" value="Speichern" data-theme="c">
+
+            </form>
+
+        </div>
+    </div>
+    <!-- /singleListView-->
+
+    <div data-role="header" data-theme="b" data-position="fixed">
+        <h1>Anforderungsliste</h1>
+        <a href="login.html" class="ui-btn ui-btn-a ui-btn-right ui-shadow ui-corner-all ui-icon-user ui-btn-icon-notext"
+           id="userLogin" data-iconshadow="true">User</a>
+        <a href="#" id="back" data-rel="back"
+           class="ui-btn ui-btn-a ui-btn-left ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext">Menu</a>
+    </div>
+    <div role="main" data-role="content" data-theme="b" class="ui-content">
+        <div class="ui-corner-all custom-corners">
+              
+            <div class="ui-bar ui-bar-a">
+                    <h3>Liste <span id="listPlaceHolder"></span></h3>     
+            </div>
+            <div id="listenBody" class="ui-body ui-body-a">
+                <p>Sorry aber du hast noch kein Material erfasst.</p>
+                <ul id="listdetails" data-role="listview" data-inset="true">
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div data-role="footer" data-theme="b" data-position="fixed">
+        <div data-role="navbar" data-iconpos="top">
+            <ul data-grid="c">
+                <li><a id="editItemButton" href="#singleListView" data-rel="popup" data-icon="plus">Neu</a></li>
+                <li><a id="saveListButton" href="liste.html" data-icon="check" >Liste speichern</a></li>
+                <li><a id="sendListButton" href="#" data-icon="mail" >Senden</a></li>
+            </ul>
+        </div>
+        <!-- /navbar -->
+
+        <p class="copyright">
+            <small>Copyright&copy;Artur Voll - <a href="http://media-store.net"
+                                                  target="_blank" rel="external" data-ajax="false">Media-Store.net</a>
+            </small>
+        </p>
+    </div>
+</div>
+<!-- /page listen -->
+</body>
+</html>

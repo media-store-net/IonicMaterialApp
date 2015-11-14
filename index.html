@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Materialanforderung-App</title>
+    <link rel="stylesheet" href="./css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <script src="./js/jquery-2.1.4.min.js"></script>
+    <script src="./js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="./js/main.js"></script>
+
+</head>
+<body>
+<div data-role="page" id="home">
+    <div data-role="panel" id="menuPanel" data-display="overlay" data-theme="b">
+        <nav data-role="navigation">
+            <ul data-role="listview" data-icon="false">
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="login.html">Login</a>
+                </li>
+                <li>
+                    <a href="listen.html">Listenübersicht</a>
+                </li>
+            </ul>
+        </nav>
+    </div><!-- /panel -->
+
+    <div data-role="header" data-theme="b" data-position="fixed">
+        <a href="#menuPanel" id="menu"
+           class="ui-btn ui-btn-a ui-btn-left ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext">Menu</a>
+        <h1 class="">Material-App</h1>
+        <a href="login.html" class="ui-btn ui-btn-a ui-btn-right ui-shadow ui-corner-all ui-icon-user ui-btn-icon-notext"
+           id="userLogin" data-iconshadow="true">User</a>
+
+    </div>
+    <div role="main" data-role="content" data-theme="b" class="ui-content">
+        <h2 class="text-center">Materialanforderung mal anders... </h2>
+        <div class="text-center content">
+            <i class="fa fa-file-text fa-5x"></i>
+        </div>
+    </div>
+
+    <div data-role="footer" data-theme="b" data-position="fixed">
+        <div data-role="navbar" data-iconpos="top">
+            <ul data-grid="b" class="">
+                <li><a id="addListButton" href="#" data-rel="page" data-icon="plus">Neue Liste</a></li>
+                <li><a href="listen.html"  data-icon="eye" >Zeige Listen</a></li>
+            </ul>
+        </div>
+        <!-- /navbar -->
+
+        <p class="copyright">
+            <small>Copyright&copy;Artur Voll - <a href="http://media-store.net"
+                                                  target="_blank" rel="external" data-ajax="false">Media-Store.net</a></small>
+        </p>
+    </div>
+</div>
+<!-- /page -->
+
+</body>
+</html>

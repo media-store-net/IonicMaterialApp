@@ -1,0 +1,104 @@
+@charset "UTF-8";
+@import "font-awesome.min.css";
+
+/* ALLGEMEIN */
+
+html, body {
+    font-family: tahoma, sans-serif;
+    font-size: 16px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.content {
+    padding-bottom: 4em;
+}
+
+/* HEADER */
+
+.ui-header, .ui-footer {
+    background-color: #909090;
+    border-color: #585858;
+    background-image: url('../images/schwarz-verlauf.png');
+    background-size: contain;
+    background-repeat: repeat-x;
+}
+
+.ui-header {
+    padding: 1em 0;
+    font-size: 1.3em;
+}
+
+/* MAIN */
+
+.ui-bar-b .ui-btn {
+    background-image: url('../images/blau-verlauf.png');
+    background-size: contain;
+    background-repeat: repeat-x;
+}
+
+.ui-header-fixed .ui-btn-left, .ui-header-fixed .ui-btn-right {
+    margin-top: 1em;
+    font-size: x-large;
+    top: 0;
+}
+
+.ui-link:after {
+    padding: 0.3em;
+    border: 1px solid #f8f8f8;
+}
+
+.ui-footer .ui-navbar .ui-btn {
+    font-size: large;
+}
+
+#home, #listen, #liste, #login {
+    background-image: url("../images/tweed.png");
+    background-repeat: repeat;
+    color: #f8f8f8
+}
+
+.ui-content {
+    background: none;
+}
+/*Home*/
+
+#home .ui-content h2 {
+    font-size: 1.7em;
+    margin: 2.5em 0 3em;
+    text-shadow: 1px 1px 2px #000;
+    color: #f8f8f8;
+}
+/*Login*/
+
+/*Listen*/
+div#addListForm, div#singleListView {
+    padding: 0 4em 2em;
+    background-color: #17176F;
+    color: #f8f8f8;
+    border-radius: 1em;
+    border: 1px solid #f8f8f8;
+    text-shadow: 1px 1px 1px #000;
+}
+
+#listView h3 {
+    font-size: x-large;
+}
+
+/*
+* FOOTER
+*/
+
+/*.ui-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+} */
+
+p.copyright {
+    text-align: center;
+    font-size: 0.75em;
+}
