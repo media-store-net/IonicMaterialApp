@@ -65,59 +65,66 @@ jQuery(document).ready(function ($) {
     }
 
 // Alle Listen anzeigen
-    function allListsView(param) {
-        var listObject;
-        // Transaction auswählen
-        var trans = myDB.transaction(['listen'], 'readonly');
-        // ObejectStore auswählen
-        var objectStore = trans.objectStore('listen');
-        // Cursor für alle Einträge von 0 bis zum Ende
-        var range = IDBKeyRange.lowerBound(0);
-        var cursorRequest = objectStore.openCursor(range);
+function getAllLists(param) {
+  //defer async result
+  var deferred = Promise.defer();
 
-        cursorRequest.onsuccess = function (event) {
-            var result = event.target.result;
+  var listResult = [];
 
-            if (result) {
-                /*switch (param) {
+  // Transaction auswählen
+  var trans = myDB.transaction(['listen'], 'readonly');
+  // ObejectStore auswählen
+  var objectStore = trans.objectStore('listen');
+  // Cursor für alle Einträge von 0 bis zum Ende
+  var range = IDBKeyRange.lowerBound(0);
+  var cursorRequest = objectStore.openCursor(range);
 
-                    case 'single' :
-                        // Anzeige der Listendetails
-                        var listObject = '<li>' + result.value + '</li>';
-                        result.continue();
-                        break;
+  cursorRequest.onsuccess = function (event) {
+
+    var cursorResult = event.target.result;
+
+    if (!cursorResult) { //auflöse promise, wenn cursor am Ende, oder wenn es nicht existiert
+      deferred.resolve(listResult); //listResult ist dann in then-Methode verfügbar
+    } else {
+      /*switch (param) {
+
+          case 'single' :
+              // Anzeige der Listendetails
+              var listObject = '<li>' + result.value + '</li>';
+              result.continue();
+              break;
 
 
-                    case 'list' :
-                        // Anzeige aller Listen
-                        var listObject = '<li>' + result.value.title + '</li>';
-                        result.continue();
-                        break;
+          case 'list' :
+              // Anzeige aller Listen
+              var listObject = '<li>' + result.value.title + '</li>';
+              result.continue();
+              break;
 
-                    default:
-                        // Standard
-                        var listObject = '<li>' + result.value + '</li>';
-                        result.continue();
-                        break;
+          default:
+              // Standard
+              var listObject = '<li>' + result.value + '</li>';
+              result.continue();
+              break;
 
-                    return listObject;
-                }*/
+          return listObject;
+      }*/
 
-                listObject = result.value;
-                 // Cursor zum nächsten Eintrag bewegen
-                 result.continue();
-            }
-            return listObject;
-        }
 
-        cursorRequest.onerror = function (event) {
-            console.log(event);
-        }
+      listResult.push(cursorResult.value)
 
-        console.log(listObject);
-        return listObject;
+      // Cursor zum nächsten Eintrag bewegen
+      cursorResult.continue();
     }
+  }
 
+  cursorRequest.onerror = function (event) {
+    console.log(event);
+    deferred.reject('error occurs on cursorRequest');
+  }
+
+  return deferred.promise;
+}
 
 //@todo Index.html
 
@@ -135,11 +142,23 @@ jQuery(document).ready(function ($) {
 
     // Alle Listen anzeigen
     $(":mobile-pagecontainer").on("pagecontainershow", function () {
-        if ($('#allLists').length) {
-            var list = allListsView('list');
-            //allListsView('list');
-            console.log(list);
-        }
+        var $allLists = $('#allLists');
+        var $noListsExistsMsg = $('#noListsExistsMsg');
+
+        $allLists.children().remove();
+        $noListsExistsMsg.removeClass('notVisible');
+
+        getAllLists('list').then(function (list) {
+          list.forEach(function (item) {
+            $allLists.append('<li>' + item.id + ': ' + item.title + '</li>');
+          });
+
+
+          if(list.length > 0) {
+            $noListsExistsMsg.addClass('notVisible');
+          }
+
+        });
     });
 
 
