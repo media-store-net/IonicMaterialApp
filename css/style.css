@@ -87,6 +87,10 @@ div#addListForm, div#singleListView {
     font-size: x-large;
 }
 
+.notVisible {
+  display: none;
+}
+
 /*
 * FOOTER
 */
