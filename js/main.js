@@ -66,7 +66,7 @@ jQuery(document).ready(function ($) {
 
 // Alle Listen anzeigen
     function allListsView(param) {
-        var listObject;
+        var listObject = [];
         // Transaction auswählen
         var trans = myDB.transaction(['listen'], 'readonly');
         // ObejectStore auswählen
@@ -79,43 +79,56 @@ jQuery(document).ready(function ($) {
             var result = event.target.result;
 
             if (result) {
+                listObject.push(result.value);
+                result.continue();
+
+
                 /*switch (param) {
 
-                    case 'single' :
-                        // Anzeige der Listendetails
-                        var listObject = '<li>' + result.value + '</li>';
-                        result.continue();
-                        break;
+                 case 'single' :
+                 // Anzeige der Listendetails
+                 anzeige = '<li>' + listObject.title + '</li>';
+                 listObject.continue();
+                 break;
 
 
-                    case 'list' :
-                        // Anzeige aller Listen
-                        var listObject = '<li>' + result.value.title + '</li>';
-                        result.continue();
-                        break;
-
-                    default:
-                        // Standard
-                        var listObject = '<li>' + result.value + '</li>';
-                        result.continue();
-                        break;
-
-                    return listObject;
-                }*/
-
-                listObject = result.value;
-                 // Cursor zum nächsten Eintrag bewegen
+                 case 'list' :
+                 // Anzeige aller Listen
+                 anzeige = '<li>' + result.value.title + '</li>';
                  result.continue();
+                 break;
+
+                 default:
+                 // Standard
+                 var anzeige = '<li>' + listObject.title + '</li>';
+                 listObject.continue();
+                 break;
+                 }*/
             }
+
             return listObject;
+
         }
 
         cursorRequest.onerror = function (event) {
             console.log(event);
         }
 
-        console.log(listObject);
-        return listObject;
+        setTimeout(function () {
+            var anzeige='';
+
+            $.each(listObject , function(index, data){
+
+                anzeige += '<li>' + data.title + '</li>';
+
+                return anzeige;
+            });
+
+            $('#listBody p').remove();
+            $('#allLists').append(anzeige);
+
+        }, 40);
+
     }
 
 
@@ -136,9 +149,7 @@ jQuery(document).ready(function ($) {
     // Alle Listen anzeigen
     $(":mobile-pagecontainer").on("pagecontainershow", function () {
         if ($('#allLists').length) {
-            var list = allListsView('list');
-            //allListsView('list');
-            console.log(list);
+            allListsView('list');
         }
     });
 
@@ -164,5 +175,4 @@ jQuery(document).ready(function ($) {
 
 //@todo Helper
 
-})
-;
+});
