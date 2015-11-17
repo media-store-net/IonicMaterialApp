@@ -65,72 +65,66 @@ jQuery(document).ready(function ($) {
     }
 
 // Alle Listen anzeigen
-    function allListsView(param) {
-        var listObject = [];
-        // Transaction auswählen
-        var trans = myDB.transaction(['listen'], 'readonly');
-        // ObejectStore auswählen
-        var objectStore = trans.objectStore('listen');
-        // Cursor für alle Einträge von 0 bis zum Ende
-        var range = IDBKeyRange.lowerBound(0);
-        var cursorRequest = objectStore.openCursor(range);
+function getAllLists(param) {
+    //defer async result
+    var deferred = Promise.defer();
+}
+  var listResult = [];
 
-        cursorRequest.onsuccess = function (event) {
-            var result = event.target.result;
+  // Transaction auswählen
+  var trans = myDB.transaction(['listen'], 'readonly');
+  // ObejectStore auswählen
+  var objectStore = trans.objectStore('listen');
+  // Cursor für alle Einträge von 0 bis zum Ende
+  var range = IDBKeyRange.lowerBound(0);
+  var cursorRequest = objectStore.openCursor(range);
 
-            if (result) {
-                listObject.push(result.value);
-                result.continue();
+  cursorRequest.onsuccess = function (event) {
+
+    var cursorResult = event.target.result;
+
+    if (!cursorResult) { //auflöse promise, wenn cursor am Ende, oder wenn es nicht existiert
+      deferred.resolve(listResult); //listResult ist dann in then-Methode verfügbar
+    } else {
+      /*switch (param) {
+
+          case 'single' :
+              // Anzeige der Listendetails
+              var listObject = '<li>' + result.value + '</li>';
+              result.continue();
+              break;
 
 
-                /*switch (param) {
+          case 'list' :
+              // Anzeige aller Listen
+              var listObject = '<li>' + result.value.title + '</li>';
+              result.continue();
+              break;
 
-                 case 'single' :
-                 // Anzeige der Listendetails
-                 anzeige = '<li>' + listObject.title + '</li>';
-                 listObject.continue();
-                 break;
+          default:
+              // Standard
+              var listObject = '<li>' + result.value + '</li>';
+              result.continue();
+              break;
+
+          return listObject;
+      }*/
 
 
-                 case 'list' :
-                 // Anzeige aller Listen
-                 anzeige = '<li>' + result.value.title + '</li>';
-                 result.continue();
-                 break;
+      listResult.push(cursorResult.value)
 
-                 default:
-                 // Standard
-                 var anzeige = '<li>' + listObject.title + '</li>';
-                 listObject.continue();
-                 break;
-                 }*/
-            }
-
-            return listObject;
-
-        }
-
-        cursorRequest.onerror = function (event) {
-            console.log(event);
-        }
-
-        setTimeout(function () {
-            var anzeige='';
-
-            $.each(listObject , function(index, data){
-
-                anzeige += '<li>' + data.title + '</li>';
-
-                return anzeige;
-            });
-
-            $('#listBody p').remove();
-            $('#allLists').append(anzeige);
-
-        }, 40);
-
+      // Cursor zum nächsten Eintrag bewegen
+      cursorResult.continue();
     }
+  }
 
+  cursorRequest.onerror = function (event) {
+    console.log(event);
+    deferred.reject('error occurs on cursorRequest');
+  }
+
+  return deferred.promise;
+}
 
 //@todo Index.html
 
@@ -148,9 +142,24 @@ jQuery(document).ready(function ($) {
 
     // Alle Listen anzeigen
     $(":mobile-pagecontainer").on("pagecontainershow", function () {
-        if ($('#allLists').length) {
-            allListsView('list');
-        }
+
+        var $allLists = $('#allLists');
+        var $noListsExistsMsg = $('#noListsExistsMsg');
+
+        $allLists.children().remove();
+        $noListsExistsMsg.removeClass('notVisible');
+
+        getAllLists('list').then(function (list) {
+          list.forEach(function (item) {
+            $allLists.append('<li>' + item.id + ': ' + item.title + '</li>');
+          });
+
+
+          if(list.length > 0) {
+            $noListsExistsMsg.addClass('notVisible');
+          }
+
+        });
     });
 
 
@@ -175,4 +184,3 @@ jQuery(document).ready(function ($) {
 
 //@todo Helper
 
-});
