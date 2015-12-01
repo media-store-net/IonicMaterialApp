@@ -1,0 +1,19 @@
+/* Allgemein */
+.pane {
+  background-image: url('/img/tweed.png');
+}
+
+.bar-positive {
+  background-image: url('/img/blau-verlauf.png')!important;
+  background-size: contain !important;
+}
+
+/*home.html*/
+h1#home-title {
+  margin-top: 3em;
+}
+
+span#clipboard {
+  font-size: 8em;
+  line-height: 2em;
+}
