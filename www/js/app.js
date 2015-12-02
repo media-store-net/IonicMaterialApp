@@ -22,6 +22,7 @@
         });
 
         $stateProvider.state('listen', {
+            cache: false,
             url: '/listen',
             templateUrl: 'templates/listen.html'
         });

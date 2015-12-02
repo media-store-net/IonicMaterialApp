@@ -4,17 +4,31 @@ app.controller('openListenDB', function ($scope, listenDB) {
     $scope.myDB = listenDB.openDB();
 });
 
-app.controller('listenCtrl', function ($scope, listenDB) {
+app.controller('listenCtrl', function ($scope, $ionicLoading, listenDB) {
 
-    listenDB.openDB().then(listen = listenDB.getLists())
+    var listen = '';
 
-    listen.then(
-        $scope.listen = listenDB.getLists()
-    );
+    listenDB.openDB().then(function () {
 
-    //
+        function loadLists() {
+            listen = listenDB.getLists();
 
-    $scope.addListItems = function(){
-        listenDB.addList('Liste 3');
-    }
+            listen.then(function () {
+                $scope.listen = listen;
+            });
+        }
+        loadLists();
+        //
+
+        $scope.addListItems = function (name) {
+            $ionicLoading.show({template: 'speichern'});
+            listenDB.addList(name).then(function () {
+                $scope.listen = listenDB.getLists();
+                $ionicLoading.hide();
+                loadLists();
+            });
+        }
+
+        return $scope;
+    });
 });

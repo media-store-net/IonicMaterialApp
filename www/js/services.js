@@ -53,13 +53,16 @@ app.factory('listenDB', function ($q) {
 
         // Liste hinzufuegen
         addList: function (title) {
+            var r = $q.defer();
             // Transaction auswählen
             var trans = myDB.transaction(['listen'], 'readwrite');
             trans.oncomplete = function (event) {
                 console.log('Liste hinzugefügt');
+                r.resolve(event);
             }
             trans.onerror = function (event) {
                 console.log(event);
+                r.reject(event);
             }
 
             // ObejectStore auswählen
@@ -67,6 +70,7 @@ app.factory('listenDB', function ($q) {
             // Antwort
             var request = objectStore.add({title: title});
 
+            return r.promise;
         },
 
         // Alle Listen aus DB auslesen
@@ -104,8 +108,21 @@ app.factory('listenDB', function ($q) {
         }
 
         return defer.promise;
-    }
+    },
 
+        // Eine Liste löschen
+        deleteList: function (id) {
+            // Transaction auswählen
+            var trans = myDB.transaction(['listen'], 'readwrite');
+            // ObejectStore auswählen
+            var objectStore = trans.objectStore('listen');
+            // Eintrag löschen
+            var request = objectStore.delete(id);
+            // Bei Erfolg
+            request.onsuccess = function (evt) {
+                console.log('Eintrag ' + id + ' gelöscht');
+            }
+        }
     }
 
 });

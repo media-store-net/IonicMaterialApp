@@ -3,12 +3,25 @@
         <div class="list card">
             <div class="item item-icon-right"
                  ng-repeat="list in listen.$$state.value" ng-click="doSomething()">
-                <h3 class="dark">{{list.title}}</h3>
-                <span class="badge badge-assertive">{{list.mat | matQuantity }}</span>
+                <h3 class="dark">
+                    {{list.title}}
+                </h3>
+                <!-- <span class="badge badge-assertive">
+                    {{list.mat | matQuantity }}
+                </span> -->
             </div>
-            <div class="item icon-left" ng-click="addListItems()">
-                <h3 class="dark"><i class="ion-plus-round"></i>
-                    &nbsp; Neue Liste</h3>
+            <div class="item icon-right">
+                <form ng-submit="addListItems(formData.title)">
+                    <label class="item item-input">
+                        <input type="text" name="newList"
+                               placeholder="Name der Liste"
+                               ng-model="formData.title"
+                               ng-required="true">
+                    </label>
+                    <button class="button button-block button-calm"
+                            type="submit">Speichern
+                    </button>
+                </form>
             </div>
         </div>
     </ion-content>
