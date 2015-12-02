@@ -1,27 +1,44 @@
 (function () {
-    var app = angular.module('webapp', ['ionic']);
+    var app = angular.module('webapp', [
+    'ionic',
+    'webapp.controllers',
+    'webapp.services'
+    ]);
+
+    // Filter für Anzahl des Materials
+    app.filter('matQuantity', function () {
+        return function (input) {
+            var output = input.length;
+            return output;
+        }
+    });
 
     //APP Konfiguration
     app.config(function ($stateProvider, $urlRouterProvider) {
         // Templates //
         $stateProvider.state('home', {
             url: '/home',
-            templateURL: '/templates/home.html'
+            templateUrl: '/templates/home.html'
         });
 
         $stateProvider.state('listen', {
             url: '/listen',
-            templateURL: 'templates/listen.html'
+            templateUrl: 'templates/listen.html'
         });
 
         $stateProvider.state('singleList', {
             url: '/list',
-            templateURL: 'templates/single-list.html'
+            templateUrl: 'templates/single-list.html'
         });
 
         $stateProvider.state('login', {
             url: '/login',
-            templateURL: 'templates/login.html'
+            templateUrl: 'templates/login.html'
+        });
+
+        $stateProvider.state('settings', {
+            url: '/settings',
+            templateUrl: 'templates/settings.html'
         });
 
         $urlRouterProvider.otherwise('/home');

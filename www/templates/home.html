@@ -1,9 +1,26 @@
 <ion-view view-title="Material-App">
+    <ion-nav-buttons side="right">
+        <a href="#/login" class="button button-clear ion-person "
+                ng-click="doSomething()"></a>
+    </ion-nav-buttons>
     <ion-content class="padding">
-        <h2 class="text-center">Materialanforderung mal anders... </h2>
+        <h1 id="home-title" class="text-center">Materialanforderung <br> mal anders... </h1>
+
         <div class="text-center">
-            <h2 icon="ion-clipboard"></h2>
-            <p>Bla,bla 2</p>
+            <span id="clipboard" class="ion-clipboard"></span>
+            <a class="button button-calm button-block" href="#/listen">
+                Jetzt testen
+            </a>
         </div>
     </ion-content>
+
+    <ion-footer-bar class="bar-positive">
+        <div class="row">
+            <a href="#/listen" class=" col button button-clear ion-edit">
+            </a>
+            <a href="#/settings" class="col button button-clear ion-gear-b">
+
+            </a>
+        </div>
+    </ion-footer-bar>
 </ion-view>

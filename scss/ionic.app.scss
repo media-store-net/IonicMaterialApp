@@ -15,9 +15,20 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+$positive:                        #1A54AB !default;
+$calm:                            #0B66A3 !default;
+
+$base-background-color:           #444 !default;
+$base-color:                      #f8f8f8 !default;
+
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+@import url('https://fonts.googleapis.com/css?family=Black+Ops+One');
+$font-family-base:     "Tahoma", "Roboto", "Segoe UI", sans-serif !default;
+$headings-font-family: 'Black Ops One', cursive;
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
+@import "../www/scss/webapp";

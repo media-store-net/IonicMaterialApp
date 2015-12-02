@@ -1,8 +1,15 @@
-<ion-view view-title="Listen">
+<ion-view view-title="Listen" ng-controller="listenCtrl">
     <ion-content class="padding">
-        <h1 class="text-center">Listen</h1>
-        <div class="text-center">
-            <i class="ion-clipboard"></i>
+        <div class="list card">
+            <div class="item item-icon-right"
+                 ng-repeat="list in listen.$$state.value" ng-click="doSomething()">
+                <h3 class="dark">{{list.title}}</h3>
+                <span class="badge badge-assertive">{{list.mat | matQuantity }}</span>
+            </div>
+            <div class="item icon-left" ng-click="addListItems()">
+                <h3 class="dark"><i class="ion-plus-round"></i>
+                    &nbsp; Neue Liste</h3>
+            </div>
         </div>
     </ion-content>
 </ion-view>
