@@ -1,34 +1,32 @@
 var app = angular.module('webapp.controllers', []);
 
-app.controller('openListenDB', function ($scope, listenDB) {
-    $scope.myDB = listenDB.openDB();
-});
+app.controller('listenCtrl', function ($q, $scope, $ionicLoading, listenDB, initListen) {
 
-app.controller('listenCtrl', function ($scope, $ionicLoading, listenDB) {
+  console.log('init listen elements on controller creation', initListen);
 
-    var listen = '';
+  $scope.listen = initListen;
 
-    listenDB.openDB().then(function () {
-
-        function loadLists() {
-            listen = listenDB.getLists();
-
-            listen.then(function () {
-                $scope.listen = listen;
-            });
-        }
-        loadLists();
-        //
-
-        $scope.addListItems = function (name) {
-            $ionicLoading.show({template: 'speichern'});
-            listenDB.addList(name).then(function () {
-                $scope.listen = listenDB.getLists();
-                $ionicLoading.hide();
-                loadLists();
-            });
-        }
-
-        return $scope;
+  function loadLists() {
+    return listenDB.getLists().then(function (listen) {
+      console.log('got listen: ', listen);
+      $scope.listen = listen;
     });
+  }
+
+  $scope.addListItems = function (name) {
+    console.log('chain all the async calls in good order');
+    $q.when(true).then(function () {
+      console.log('1), show loading indicator');
+      $ionicLoading.show({template: 'speichern'});
+    }).then(function () {
+      console.log('2), add new list');
+      return listenDB.addList(name);
+    }).then(function () {
+      console.log('3), reload the list');
+      return loadLists();
+    }).then(function () {
+      console.log('4), hide loading indicator');
+      $ionicLoading.hide();
+    });
+  }
 });
