@@ -28,7 +28,7 @@
         });
 
         $stateProvider.state('singleList', {
-            url: '/list',
+            url: '/list/:id',
             templateUrl: 'templates/single-list.html'
         });
 

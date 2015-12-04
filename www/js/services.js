@@ -68,7 +68,7 @@ app.factory('listenDB', function ($q) {
             // ObejectStore auswählen
             var objectStore = trans.objectStore('listen');
             // Antwort
-            var request = objectStore.add({title: title});
+            var request = objectStore.add({title: title, mat: []});
 
             return r.promise;
         },
@@ -109,6 +109,34 @@ app.factory('listenDB', function ($q) {
 
         return defer.promise;
     },
+
+        // Eine Liste mit ID abrufen
+        getSingleList: function (id) {
+            var s = $q.defer();
+            //TODO
+            // Transaction auswählen
+            var trans = myDB.transaction(['listen'], 'readonly');
+            // ObejectStore auswählen
+            var objectStore = trans.objectStore('listen');
+            // Cursor für alle Einträge von 0 bis zum Ende
+            var range = IDBKeyRange.only(id);
+            var cursorRequest = objectStore.openCursor(range);
+
+            cursorRequest.onsuccess = function (event) {
+                var cursorResult = event.target.result;
+
+                if (cursorResult) {
+                    s.resolve(cursorResult); //listResult ist dann in then-Methode verfügbar
+                }
+            }
+
+            cursorRequest.onerror = function (event) {
+                console.log(event);
+                s.reject('error occurs on cursorRequest');
+            }
+
+            return s.promise;
+        },
 
         // Eine Liste löschen
         deleteList: function (id) {
