@@ -17,10 +17,11 @@ app.controller('listenCtrl', function ($scope, $ionicLoading, listenDB) {
                 $scope.listen = listen;
             });
         }
+        loadLists();
+        //
 
-        // Add List Function
         $scope.addListItems = function (name) {
-            $ionicLoading.show({template: 'speichern...'});
+            $ionicLoading.show({template: 'speichern'});
             listenDB.addList(name).then(function () {
                 $scope.listen = listenDB.getLists();
                 $ionicLoading.hide();
@@ -28,28 +29,6 @@ app.controller('listenCtrl', function ($scope, $ionicLoading, listenDB) {
             });
         }
 
-        // Delete Function
-        $scope.remove = function (listID) {
-            $ionicLoading.show({template: 'wird gelöscht...'});
-            listenDB.deleteList(listID);
-            $ionicLoading.hide();
-            loadLists();
-        }
-
-        loadLists();
-
         return $scope;
-    });
-});
-
-app.controller('singleCtrl', function ($scope, $state, $ionicLoading, listenDB) {
-    listID = $state.params.id;
-
-    listenDB.openDB().then(function () {
-        //TODO
-        function loadSingleList(ID) {
-
-        }
-        console.log(loadSingleList(listID));
     });
 });
