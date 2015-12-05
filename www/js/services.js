@@ -1,156 +1,174 @@
 var app = angular.module('webapp.services', []);
 
-app.factory('listenDB', function ($q) {
+app.factory('IndexedDB', function ($q) {
 
-    var myDB = {};
+  var mydbCache = {};
+  var dbInstances = {};
 
-// Je nach Browser speichern der IndexedDB
+  // Datenbank öffnen
+  function openInstance(dbName) {
+    if(dbInstances[dbName]) {
+      return $q.when(dbInstances[dbName]);
+    }
 
-    return {
-        // Datenbank öffnen
-        openDB: function () {
-            var d = $q.defer();
+    var d = $q.defer();
+    var indexedDB;
 
+    // Je nach Browser speichern der IndexedDB
+    if (window.indexedDB) {
+      indexedDB = window.indexedDB
+    } else if (window.webkitIndexedDB) {
+      indexedDB = window.webkitIndexedDB;
+    } else if (window.mozIndexedDB) {
+      indexedDB = window.mozIndexedDB;
+    }
 
-            if (window.indexedDB) {
-                indexedDB = window.indexedDB
-            }
-            else if (window.webkitIndexedDB) {
-                indexedDB = window.webkitIndexedDB;
-            }
-            else if (window.mozIndexedDB) {
-                indexedDB = window.mozIndexedDB;
-            }
+    // Datenbank öffnen oder erstellen(falls noch nicht vorhanden)
 
-// Datenbank öffnen oder erstellen(falls noch nicht vorhanden)
+    var openDB = indexedDB.open(dbName, 1);
+    // Falls noch nicht vorhanden
+    openDB.onupgradeneeded = function () {
+      console.log('Datenbank angelegt');
+      var myDB = this.result;
+      if (!myDB.objectStoreNames.contains(dbName)) {
+        store = myDB.createObjectStore(dbName, {
+          keyPath: 'id',
+          autoIncrement: true
+        });
+      }
 
-            var openDB = indexedDB.open('listen', 1);
-// Falls noch nicht vorhanden
-            openDB.onupgradeneeded = function () {
-                console.log('Datenbank angelegt');
-                var myDB = this.result;
-                if (!myDB.objectStoreNames.contains('listen')) {
-                    store = myDB.createObjectStore('listen', {
-                        keyPath: 'id',
-                        autoIncrement: true
-                    });
-                }
-            };
+      mydbCache[dbName] = myDB;
+    };
 
-// Bei Erfolg Globale Variable myDB überschreiben
-            openDB.onsuccess = function () {
-                console.log('Datenbank geöffnet');
-                myDB = this.result;
-                d.resolve(myDB);
-            }
+    // Bei Erfolg Globale Variable myDB überschreiben
+    openDB.onsuccess = function () {
+      console.log('Datenbank geöffnet');
+      mydbCache[dbName] = this.result;
+      d.resolve(createInstance(dbName));
+    }
 
-            openDB.onerror = function () {
-                return alert('Fehler beim erstellen der Datenbank');
-            }
+    openDB.onerror = function () {
+      return alert('Fehler beim erstellen der Datenbank');
+    }
 
-            return d.promise;
-        },
+    return d.promise;
+  }
 
-        // Liste hinzufuegen
-        addList: function (title) {
-            var r = $q.defer();
-            // Transaction auswählen
-            var trans = myDB.transaction(['listen'], 'readwrite');
-            trans.oncomplete = function (event) {
-                console.log('Liste hinzugefügt');
-                r.resolve(event);
-            }
-            trans.onerror = function (event) {
-                console.log(event);
-                r.reject(event);
-            }
+  //creates an instace for specific dbName
+  function createInstance(dbName) {
+    var myDB = mydbCache[dbName];
+    dbInstances[dbName] = {
+      // Liste hinzufuegen
+      addList: function (title) {
+        var r = $q.defer();
+        // Transaction auswählen
+        var trans = myDB.transaction([dbName], 'readwrite');
+        trans.oncomplete = function (event) {
+          console.log('Liste hinzugefügt');
+          r.resolve(event);
+        }
+        trans.onerror = function (event) {
+          console.log(event);
+          r.reject(event);
+        }
 
-            // ObejectStore auswählen
-            var objectStore = trans.objectStore('listen');
-            // Antwort
-            var request = objectStore.add({title: title, mat: []});
+        // ObejectStore auswählen
+        var objectStore = trans.objectStore(dbName);
+        // Antwort
+        var request = objectStore.add({
+          title: title,
+          mat: []
+        });
 
-            return r.promise;
-        },
+        return r.promise;
+      },
 
-        // Alle Listen aus DB auslesen
-        getLists: function () {
-            var defer = $q.defer();
+      // Alle Listen aus DB auslesen
+      getLists: function () {
+        var defer = $q.defer();
 
-            //defer async result
+        //defer async result
         var listResult = [];
 
         // Transaction auswählen
-        var trans = myDB.transaction(['listen'], 'readonly');
+        var trans = myDB.transaction([dbName], 'readonly');
         // ObejectStore auswählen
-        var objectStore = trans.objectStore('listen');
+        var objectStore = trans.objectStore(dbName);
         // Cursor für alle Einträge von 0 bis zum Ende
         var range = IDBKeyRange.lowerBound(0);
         var cursorRequest = objectStore.openCursor(range);
 
         cursorRequest.onsuccess = function (event) {
-            var cursorResult = event.target.result;
+          var cursorResult = event.target.result;
 
-            if (!cursorResult) { //auflöse promise, wenn cursor am Ende, oder wenn es nicht existiert
-                defer.resolve(listResult); //listResult ist dann in then-Methode verfügbar
-            } else {
+          if (!cursorResult) { //auflöse promise, wenn cursor am Ende, oder wenn es nicht existiert
+            defer.resolve(listResult); //listResult ist dann in then-Methode verfügbar
+          } else {
 
-                listResult.push(cursorResult.value)
+            listResult.push(cursorResult.value)
 
-                // Cursor zum nächsten Eintrag bewegen
-                cursorResult.continue();
-            }
+            // Cursor zum nächsten Eintrag bewegen
+            cursorResult.continue();
+          }
         }
 
         cursorRequest.onerror = function (event) {
-            console.log(event);
-            defer.reject('error occurs on cursorRequest');
+          console.log(event);
+          defer.reject('error occurs on cursorRequest');
         }
 
         return defer.promise;
-    },
+      },
 
-        // Eine Liste mit ID abrufen
-        getSingleList: function (id) {
-            var s = $q.defer();
-            //TODO
-            // Transaction auswählen
-            var trans = myDB.transaction(['listen'], 'readonly');
-            // ObejectStore auswählen
-            var objectStore = trans.objectStore('listen');
-            // Cursor für alle Einträge von 0 bis zum Ende
-            var range = IDBKeyRange.only(id);
-            var cursorRequest = objectStore.openCursor(range);
+      // Eine Liste mit ID abrufen
+      getSingleList: function (id) {
+        var s = $q.defer();
+        //TODO
+        // Transaction auswählen
+        var trans = myDB.transaction([dbName], 'readonly');
+        // ObejectStore auswählen
+        var objectStore = trans.objectStore(dbName);
+        // Cursor für alle Einträge von 0 bis zum Ende
+        var range = IDBKeyRange.only(id);
+        var cursorRequest = objectStore.openCursor(range);
 
-            cursorRequest.onsuccess = function (event) {
-                var cursorResult = event.target.result;
+        cursorRequest.onsuccess = function (event) {
+          var cursorResult = event.target.result;
 
-                if (cursorResult) {
-                    s.resolve(cursorResult); //listResult ist dann in then-Methode verfügbar
-                }
-            }
-
-            cursorRequest.onerror = function (event) {
-                console.log(event);
-                s.reject('error occurs on cursorRequest');
-            }
-
-            return s.promise;
-        },
-
-        // Eine Liste löschen
-        deleteList: function (id) {
-            // Transaction auswählen
-            var trans = myDB.transaction(['listen'], 'readwrite');
-            // ObejectStore auswählen
-            var objectStore = trans.objectStore('listen');
-            // Eintrag löschen
-            var request = objectStore.delete(id);
-            // Bei Erfolg
-            request.onsuccess = function (evt) {
-                console.log('Eintrag ' + id + ' gelöscht');
-            }
+          if (cursorResult) {
+            s.resolve(cursorResult.value); //listResult ist dann in then-Methode verfügbar
+          }
         }
-    }
+
+        cursorRequest.onerror = function (event) {
+          console.log(event);
+          s.reject('error occurs on cursorRequest');
+        }
+
+        return s.promise;
+      },
+
+      // Eine Liste löschen
+      deleteList: function (id) {
+        // Transaction auswählen
+        var trans = myDB.transaction([dbName], 'readwrite');
+        // ObejectStore auswählen
+        var objectStore = trans.objectStore(dbName);
+        // Eintrag löschen
+        var request = objectStore.delete(id);
+        // Bei Erfolg
+        request.onsuccess = function (evt) {
+          console.log('Eintrag ' + id + ' gelöscht');
+        }
+      }
+    };
+
+    return dbInstances[dbName];
+  }
+
+  //Public methods for factory
+  return {
+    openInstance: openInstance
+  }
 
 });
