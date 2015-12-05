@@ -30,3 +30,9 @@ app.controller('listenCtrl', function ($q, $scope, $ionicLoading, listenDB, init
     });
   }
 });
+
+
+app.controller('singleCtrl', function ($q, $scope, $ionicLoading, listenDB, selectedList) {
+  console.log('selectedList elements on controller creation', selectedList);
+  $scope.list = selectedList;
+});

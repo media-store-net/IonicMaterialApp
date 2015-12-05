@@ -1,16 +1,21 @@
 <ion-view view-title="Listen">
     <ion-content class="padding">
-        <div class="list card">
-            <div class="item item-icon-right"
-                 ng-repeat="list in listen track by $index" ng-click="doSomething()">
+        <ion-list class="card">
+            <ion-item class="item-icon-right"
+                 ng-repeat="list in listen" href="#/list/{{list.id}}"
+                 ng-click="getSingleList(list.id)">
                 <h3 class="dark">
                     {{list.title}}
                 </h3>
-                <!-- <span class="badge badge-assertive">
+                <span class="badge badge-assertive">
                     {{list.mat | matQuantity }}
-                </span> -->
-            </div>
-            <div class="item icon-right">
+                </span>
+                <ion-option-button class="button-assertive"
+                                   ng-click="remove(list.id)">
+                    <i class="icon ion-ios-trash-outline"></i>
+                </ion-option-button>
+            </ion-item>
+            <ion-item class="item-icon-right">
                 <form ng-submit="addListItems(formData.title)">
                     <label class="item item-input">
                         <input type="text" name="newList"
@@ -22,7 +27,7 @@
                             type="submit">Speichern
                     </button>
                 </form>
-            </div>
-        </div>
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>

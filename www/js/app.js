@@ -8,6 +8,9 @@
     // Filter für Anzahl des Materials
     app.filter('matQuantity', function () {
         return function (input) {
+            if(!input)
+              return 0;
+
             var output = input.length;
             return output;
         }
@@ -39,8 +42,20 @@
         });
 
         $stateProvider.state('singleList', {
-            url: '/list',
-            templateUrl: 'templates/single-list.html'
+            url: '/list/:id',
+            controller: 'singleCtrl',
+            templateUrl: 'templates/single-list.html',
+            resolve: {
+              'listenDB': function ($q, IndexedDB) {
+                console.log('init or open listen db');
+                return IndexedDB.openInstance('listen');
+              },
+              'selectedList': function ($q, listenDB, $stateParams) {
+                console.log('init or open listen db', $stateParams);
+                var intId = parseInt($stateParams.id, 10);
+                return listenDB.getSingleList(intId);
+              },
+            }
         });
 
         $stateProvider.state('login', {
