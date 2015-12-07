@@ -1,9 +1,9 @@
-<ion-view view-title="Listen" ng-controller="listenCtrl">
+<ion-view view-title="Listen">
     <ion-content class="padding">
         <ion-list class="card">
             <ion-item class="item-icon-right"
-                 ng-repeat="list in listen.$$state.value" href="#/list/{{list.id}}"
-                 ng-click="getSingleList(list.id)">
+                      ng-repeat="list in listen" href="#/list/{{list.id}}"
+                      ng-click="getSingleList(list.id)">
                 <h3 class="dark">
                     {{list.title}}
                 </h3>
@@ -15,16 +15,17 @@
                     <i class="icon ion-ios-trash-outline"></i>
                 </ion-option-button>
             </ion-item>
-            <ion-item class="item-icon-right">
-                <form ng-submit="addListItems(formData.title)">
-                    <label class="item item-input">
+            <ion-item>
+                <form class="item item-input-inset" ng-submit="addListItems(formData.title)">
+                    <label class="item-input-wrapper">
                         <input type="text" name="newList"
-                               placeholder="Name der Liste"
+                               placeholder="Namen der Liste eingeben"
+                               value=""
                                ng-model="formData.title"
                                ng-required="true">
                     </label>
-                    <button class="button button-block button-calm"
-                            type="submit">Speichern
+                    <button class="button button-small button-clear button-calm"
+                            type="submit"><i class="ion-checkmark-round"></i>
                     </button>
                 </form>
             </ion-item>

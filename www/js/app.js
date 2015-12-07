@@ -24,13 +24,41 @@
         $stateProvider.state('listen', {
             cache: false,
             url: '/listen',
-            templateUrl: 'templates/listen.html'
+            templateUrl: 'templates/listen.html',
+            controller: 'listenCtrl',
+            resolve: {
+                'listenDB': function ($q, IndexedDB) {
+                    console.log('init listen db, open the instance');
+                    return IndexedDB.openInstance('listen');
+                },
+
+                'initListen': function ($q, listenDB) {
+                    console.log('read the initial list elements from the listenDB, note, that listenDB was initialized in previous step');
+                    return listenDB.getLists();
+                },
+            }
         });
 
+
+
+
         $stateProvider.state('singleList', {
+            cache: false,
             url: '/list/:id',
-            templateUrl: 'templates/single-list.html'
-        });
+            templateUrl: 'templates/single-list.html',
+            controller: 'singleCtrl',
+            resolve: {
+                'listenDB': function ($q, IndexedDB) {
+                    console.log('init listen db, open the instance');
+                    return IndexedDB.openInstance('listen');
+                },
+
+                'initListen': function ($q, listenDB) {
+                    console.log('read the initial list elements from the listenDB');
+                    return listenDB.getLists();
+                },
+            }
+            });
 
         $stateProvider.state('login', {
             url: '/login',
