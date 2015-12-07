@@ -1,7 +1,6 @@
 var app = angular.module('webapp.controllers', []);
 
 app.controller('listenCtrl', function ($q, $scope, $ionicLoading, listenDB, initListen) {
-
     console.log('init listen elements on controller creation', initListen);
 
     $scope.listen = initListen;
@@ -31,7 +30,6 @@ app.controller('listenCtrl', function ($q, $scope, $ionicLoading, listenDB, init
     };
 
     // Delete Function
-
     $scope.remove = function (listID) {
         console.log('remove function run');
         $q.when(true).then(function () {
@@ -45,26 +43,8 @@ app.controller('listenCtrl', function ($q, $scope, $ionicLoading, listenDB, init
 });
 
 //Single view controller
-app.controller('singleCtrl', function ($q, $state, $scope, $ionicLoading, listenDB, initListen) {
-    var listID = $state.params.id;
-    $scope.listen = initListen;
-    //console.log($scope.listen);
-    for (var i = 0; i < $scope.listen.length; i++){
-        if($scope.listen[i].id == listID){
-            console.log($scope.listen[i]);
-            $scope.list = $scope.listen[i];
-            return;
-        }
-    }
-
-    function loadSingleList() {
-        return listenDB.getSingleList(listID).then(function (list) {
-            console.log('got list item: ', list);
-            $scope.list = list;
-        });
-    }
+app.controller('singleCtrl', function ($q, $scope, $ionicLoading, listenDB, selectedList) {
+  console.log('selectedList elements on controller creation', selectedList);
+  $scope.list = selectedList;
 
 });
-
-
-
