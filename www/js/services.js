@@ -162,6 +162,26 @@ app.factory('IndexedDB', function ($q) {
                 request.onsuccess = function (evt) {
                     console.log('Eintrag ' + id + ' gelöscht');
                 }
+            },
+
+            // Eine Liste updaten
+            updateList: function (value) {
+                var s = $q.defer();
+
+                // Transaction auswählen
+                var trans = myDB.transaction([dbName], 'readwrite');
+                // ObejectStore auswählen
+                var objectStore = trans.objectStore(dbName);
+                // Eintrag löschen
+                var request = objectStore.put(value);
+                // Bei Erfolg
+                request.onsuccess = function (evt) {
+                    s.resolve(
+                        console.log('Eintrag gesichert')
+                    )
+                }
+
+                return s.promise;
             }
         };
 

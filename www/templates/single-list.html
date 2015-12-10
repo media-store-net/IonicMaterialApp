@@ -1,46 +1,69 @@
 <ion-view view-title="{{list.title}}">
     <ion-content class="padding">
+        <ion-list class="card">
+            <ion-item ng-repeat="mat in list.mat">
+                <h3 class="dark">{{mat.name}}
+                <span class="badge badge-calm">{{mat.anzahl}}</span>
+                </h3>
+                <ion-option-button class="button-assertive"
+                                   ng-click="remove(mat.name)">
+                    <i class="icon ion-ios-trash-outline"></i>
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
         <ion-list class="list-inset">
             <ion-item>
-                <form ng-submit="addListMat(formData)">
+                <form name="matForm" ng-model="formData">
                     <div class="row list">
                         <div class="col col-75">
                             <label class="item item-input">
-                                <input type="text" name="newMat"
-                                       placeholder="Materialbezeichnung"
+                                <input type="text" name="matName"
                                        ng-model="formData.name"
-                                       ng-required="true">
+                                       placeholder="Materialbezeichnung"
+                                       ng-required="true" value="">
                             </label>
                         </div>
                         <div class="col col-25">
                             <label class="item item-input item-select">
                                 <i class="icon ion-clipboard"></i>
-                                <select>
-                                    <option></option>
-                                    <option>Schrauben</option>
-                                    <option>Selbstschneider</option>
-                                    <option>Dübel</option>
+                                <select ng-model="formData.name">
+                                    <option ng-repeat="option in optionsArray">{{option}}</option>
                                 </select>
                             </label>
                         </div>
-                        </div>
+                    </div>
                     <div class="row list">
                         <div class="col col-75">
                             <div class="item range range-positive">
                                 <i class="icon ion-minus-round"></i>
-                                <input type="range" name="anzahl" min="0" max="50" value="10">
+                                <input type="range" name="matAnzahl"
+                                       ng-model="formData.anzahl"
+                                       min="0" max="50" value="10">
                                 <i class="icon ion-plus-round"></i>
                             </div>
                         </div>
                         <div class="col col-25">
-                            <span class="badge badge-calm">0</span>
+                            <span class="badge badge-calm">{{formData.anzahl}}</span>
                         </div>
-                        </div>
-                        <button class="button button-block button-calm button-small"
-                                type="submit">Speichern
-                        </button>
+                    </div>
+                    <button class="button button-block button-calm button-small"
+                            type="submit" ng-click="addListMat(matForm, formData)">Hinzufügen
+                    </button>
                 </form>
             </ion-item>
         </ion-list>
     </ion-content>
+
+    <ion-footer-bar class="bar-positive">
+        <div class="row">
+            <button class="col button button-clear tabs-icon-top ion-android-cloud-done"
+               ng-click="updateListItem(list.id)">Liste Speichern
+            </button>
+            <button class="col button button-clear tabs-icon-top ion-paper-airplane"
+               ng-click="doSomething()">
+                Liste Senden
+            </button>
+        </div>
+    </ion-footer-bar>
+
 </ion-view>
