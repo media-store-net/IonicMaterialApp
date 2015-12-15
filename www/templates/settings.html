@@ -1,7 +1,72 @@
 <ion-view view-title="Einstellungen">
     <ion-content class="padding">
-        <div class="list card">
-            <p class="text-center"><strong>Einstellungen die für den Emailversand wichtig sind.</strong></p>
-        </div>
+        <ion-list ng-show="!user.user.uid">
+            <ion-item class="card padding">
+                <h4 class="dark text-center"><i class="icon ion-person"></i>&nbsp;User-Login</h4>
+
+                <form name="loginForm" method="post" ng-submit="formData">
+                    <label class="item item-input">
+                        <span class="input-label">Benutzername:</span>
+                        <input type="text" name="formData.username" id="formData.username"
+                               ng-model="formData.username" value="">
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Password:</span>
+                        <input type="password" name="formData.pw" id="formData.pw"
+                               ng-model="formData.pw" value="">
+                    </label>
+                    <input class="button button-block button-calm" type="submit"
+                           value="Login" ng-click="user.user.uid = formData.username">
+                </form>
+
+                <hr>
+
+                <p class="dark">Noch kein Account?</p>
+                <a href="http://media-store.net/logon"
+                   class="button button-block button-calm">
+                    <i class="icon icon-left ion-person-add"></i>&nbsp;Registrieren
+                </a>
+            </ion-item>
+        </ion-list>
+        <!-- Ende LoginForm -->
+
+        <ion-list ng-show="user.user.uid">
+            <ion-item class="card padding">
+                <p>Angemeldet als <strong>{{user.user.uid}}</strong></p>
+                <button class="button button-block" ng-click="user.user.uid = false">Abmelden</button>
+            </ion-item>
+        </ion-list>
+        <!-- Anzeige angemeldeter User -->
+
+        <ion-list>
+            <ion-item class="card padding">
+                <h4 class="dark text-center"><i class="icon icon-left ion-gear-b"></i>&nbsp;Weitere Settings</h4>
+                <form name="settingsform" method="post">
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Vorname</span>
+                        <input type="text" placeholder="Vorname">
+                    </label>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Nachnahme</span>
+                        <input type="text" placeholder="Nachnahme"
+                               ng-required="true">
+                    </label>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">KFZ-Nummer</span>
+                        <input type="text" placeholder="KFZ - 14xx"
+                               ng-required="true">
+                    </label>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Email(Empfänger)</span>
+                        <input type="email" placeholder="user@example.com"
+                               ng-required="true">
+                    </label>
+                    <input class="button button-block button-calm"
+                           type="submit" value="Speichern"
+                           ng-click="doSomething()">
+                </form>
+            </ion-item>
+            <!-- Ende SettingsForm -->
+        </ion-list>
     </ion-content>
 </ion-view>

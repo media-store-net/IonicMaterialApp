@@ -60,6 +60,7 @@ app.factory('IndexedDB', function ($q) {
     function createInstance(dbName) {
         var myDB = mydbCache[dbName];
         dbInstances[dbName] = {
+        // Listen Datenbank
             // Liste hinzufuegen
             addList: function (title) {
                 var r = $q.defer();
@@ -182,7 +183,19 @@ app.factory('IndexedDB', function ($q) {
                 }
 
                 return s.promise;
-            }
+            },
+
+        // Settings Datenbank
+
+            // Settings auslesen
+            getSettings: function () {
+
+            },
+
+            // Settings speichern
+            saveSettings: function () {
+
+            },
         };
 
         return dbInstances[dbName];
@@ -193,4 +206,13 @@ app.factory('IndexedDB', function ($q) {
         openInstance: openInstance
     }
 
+});
+
+app.factory('AuthService', function ($http, $q) {
+    var user = {};
+    user.uid = false;
+
+    return {
+        user: user
+    }
 });

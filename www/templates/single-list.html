@@ -14,21 +14,22 @@
         <ion-list class="list-inset">
             <ion-item>
                 <form name="matForm" ng-model="formData">
-                    <div class="row list">
+                    <div class="row list responsive-sm">
+                        <div class="col col-25">
+                            <label class="item item-input item-select">
+                                <i class="icon ion-clipboard"></i> Schnellauswahl
+                                <select ng-model="formData.name">
+                                    <option ng-repeat="option in optionsArray">{{option}}</option>
+                                </select>
+                            </label>
+                        </div>
+
                         <div class="col col-75">
                             <label class="item item-input">
                                 <input type="text" name="matName"
                                        ng-model="formData.name"
                                        placeholder="Materialbezeichnung"
                                        ng-required="true" value="">
-                            </label>
-                        </div>
-                        <div class="col col-25">
-                            <label class="item item-input item-select">
-                                <i class="icon ion-clipboard"></i>
-                                <select ng-model="formData.name">
-                                    <option ng-repeat="option in optionsArray">{{option}}</option>
-                                </select>
                             </label>
                         </div>
                     </div>
@@ -38,6 +39,7 @@
                                 <i class="icon ion-minus-round"></i>
                                 <input type="range" name="matAnzahl"
                                        ng-model="formData.anzahl"
+                                       ng-required="true"
                                        min="0" max="50" value="10">
                                 <i class="icon ion-plus-round"></i>
                             </div>
@@ -56,12 +58,12 @@
 
     <ion-footer-bar class="bar-positive">
         <div class="row">
-            <button class="col button button-clear tabs-icon-top ion-android-cloud-done"
-               ng-click="updateListItem(list.id)">Liste Speichern
+            <button class="col button button-clear icon ion-android-cloud-done"
+               ng-click="updateListItem(list.id)"><br>Liste Speichern
             </button>
-            <button class="col button button-clear tabs-icon-top ion-paper-airplane"
+            <button class="col button button-clear icon ion-paper-airplane"
                ng-click="doSomething()">
-                Liste Senden
+                <br>Liste Senden
             </button>
         </div>
     </ion-footer-bar>

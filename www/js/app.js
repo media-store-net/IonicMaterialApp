@@ -20,7 +20,7 @@
     app.config(function ($stateProvider, $urlRouterProvider) {
         // Templates //
         $stateProvider.state('home', {
-            url: '/home',
+            url: '/',
             templateUrl: '/templates/home.html'
         });
 
@@ -65,11 +65,23 @@
         });
 
         $stateProvider.state('settings', {
+            cache: false,
             url: '/settings',
-            templateUrl: 'templates/settings.html'
+            controller: 'settingsCtrl',
+            templateUrl: 'templates/settings.html',
+            resolve: {
+                'settingsDB': function ($q, IndexedDB) {
+                    console.log('init settings db, open the instance')
+                    return IndexedDB.openInstance('settings');
+                },
+                'initSettings': function ($q, settingsDB) {
+                    console.log('read the initial list elements from the settingsDB, note, that settingsDB was initialized in previous step');
+                    return settingsDB;
+                },
+            }
         });
 
-        $urlRouterProvider.otherwise('/home');
+        $urlRouterProvider.otherwise('/');
 
     });
 

@@ -3,9 +3,13 @@
   background-image: url('../img/tweed.png');
 }
 
-.bar-positive {
-  background-image: url('../img/blau-verlauf.png');
+.bar .bar-positive {
+  background-image: url('../img/blau-verlauf.png')!important;
   background-size: contain;
+}
+
+.bar-footer {
+  height: 80px!important;
 }
 
 /*home.html*/

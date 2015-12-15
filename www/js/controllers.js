@@ -63,7 +63,7 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
         'Alu-Spray',
         'Zink-Spray',
         'RostOff'
-    ]
+    ];
 
     $scope.addListMat = function (matForm, formData) {
         if(matForm.$valid) {
@@ -100,4 +100,9 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
         });
         }
 
+});
+
+//Settings controller
+app.controller('settingsCtrl', function ($q, $scope, $ionicLoading, settingsDB, initSettings, AuthService) {
+    $scope.user = AuthService;
 });
