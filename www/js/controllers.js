@@ -106,4 +106,15 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
 //Settings controller
 app.controller('settingsCtrl', function ($q, $scope, $ionicLoading, settingsDB, initSettings, AuthService) {
     $scope.user = AuthService;
+    $scope.settings = initSettings.getSettings();
+    $scope.viewSettingsForm = false;
+
+    if(!$scope.settings){
+        $scope.viewSettingsForm = true;
+    }
+    $scope.putSettings = function (FormData) {
+        initSettings.saveSettings(1,FormData.name, FormData.vorname, FormData.kfz, FormData.email);
+    }
+
+
 });

@@ -193,8 +193,31 @@ app.factory('IndexedDB', function ($q) {
             },
 
             // Settings speichern
-            saveSettings: function () {
+            saveSettings: function (id, name, vorname, kfz, empfaenger) {
+                var r = $q.defer();
+                // Transaction auswählen
+                var trans = myDB.transaction([dbName], 'readwrite');
+                trans.oncomplete = function (event) {
+                    console.log('Settings gespeichert');
+                    r.resolve(event);
+                }
+                trans.onerror = function (event) {
+                    console.log(event);
+                    r.reject(event);
+                }
 
+                // ObejectStore auswählen
+                var objectStore = trans.objectStore(dbName);
+                // Antwort
+                var request = objectStore.put({
+                    id: id,
+                    name: name,
+                    vorname: vorname,
+                    kfz: kfz,
+                    empfaenger: empfaenger
+                });
+
+                return r.promise;
             },
         };
 

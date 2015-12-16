@@ -31,6 +31,7 @@
         <!-- Ende LoginForm -->
 
         <ion-list ng-show="user.user.uid">
+            <h4>Angemeldet:</h4>
             <ion-item class="card padding">
                 <p>Angemeldet als <strong>{{user.user.uid}}</strong></p>
                 <button class="button button-block" ng-click="user.user.uid = false">Abmelden</button>
@@ -38,35 +39,56 @@
         </ion-list>
         <!-- Anzeige angemeldeter User -->
 
-        <ion-list>
+        <ion-list ng-show="viewSettingsForm">
             <ion-item class="card padding">
                 <h4 class="dark text-center"><i class="icon icon-left ion-gear-b"></i>&nbsp;Weitere Settings</h4>
-                <form name="settingsform" method="post">
+                <form name="settingsform" method="post" ng-model="settingsFormData"
+                      ng-submit="putSettings(settingsFormData)">
                     <label class="item item-input item-floating-label">
                         <span class="input-label">Vorname</span>
-                        <input type="text" placeholder="Vorname">
+                        <input type="text" placeholder="Vorname"
+                               ng-model="settingsFormData.vorname">
                     </label>
                     <label class="item item-input item-floating-label">
                         <span class="input-label">Nachnahme</span>
                         <input type="text" placeholder="Nachnahme"
-                               ng-required="true">
+                               ng-required="true"
+                               ng-model="settingsFormData.name">
                     </label>
                     <label class="item item-input item-floating-label">
                         <span class="input-label">KFZ-Nummer</span>
                         <input type="text" placeholder="KFZ - 14xx"
-                               ng-required="true">
+                               ng-required="true"
+                               ng-model="settingsFormData.kfz">
                     </label>
                     <label class="item item-input item-floating-label">
                         <span class="input-label">Email(Empfänger)</span>
                         <input type="email" placeholder="user@example.com"
-                               ng-required="true">
+                               ng-required="true"
+                               ng-model="settingsFormData.email">
                     </label>
                     <input class="button button-block button-calm"
-                           type="submit" value="Speichern"
-                           ng-click="doSomething()">
+                           type="submit" value="Speichern">
                 </form>
             </ion-item>
-            <!-- Ende SettingsForm -->
+        </ion-list>
+        <!-- Ende SettingsForm -->
+        <ion-list ng-show="!settings">
+            <h4>Gespeicherte Settings</h4>
+            <ion-item>
+                Name: {{settings.name}}
+            </ion-item>
+            <ion-item>
+                Vorname: {{settings.vorname}}
+            </ion-item>
+            <ion-item>
+                KFZ-Nr. {{settings.kfz}}
+            </ion-item>
+            <ion-item>
+                Empfänger-Email: {{settings.empfaenger}}
+            </ion-item>
+            <button class="button button-block button-balanced"
+                    ng-click="viewSettingsForm = !viewSettingsForm">Bearbeiten</button>
         </ion-list>
     </ion-content>
 </ion-view>
