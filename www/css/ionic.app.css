@@ -9109,3 +9109,9 @@ h1#home-title {
 span#clipboard {
   font-size: 8em;
   line-height: 2em; }
+
+/* info.html */
+.info .no-wrap {
+  white-space: normal;
+  margin-top: 1em;
+  font-size: 1em; }

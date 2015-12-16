@@ -59,9 +59,9 @@
             }
         });
 
-        $stateProvider.state('login', {
-            url: '/login',
-            templateUrl: 'templates/login.html'
+        $stateProvider.state('info', {
+            url: '/info',
+            templateUrl: 'templates/info.html'
         });
 
         $stateProvider.state('settings', {

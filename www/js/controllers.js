@@ -66,9 +66,9 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
     ];
 
     $scope.addListMat = function (matForm, formData) {
-        if(matForm.$valid) {
+        if (matForm.$valid) {
             $scope.itemCache = angular.copy(formData);
-            if ($scope.itemCache){
+            if ($scope.itemCache) {
                 $scope.list.mat.push($scope.itemCache);
                 console.log('item pushed');
                 return;
@@ -76,12 +76,12 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
         }
     }
 
-    $scope.remove = function(name){
+    $scope.remove = function (name) {
         var matArray = $scope.list.mat;
 
-        for (var i = 0; i < matArray.length; i++){
+        for (var i = 0; i < matArray.length; i++) {
 
-            if (matArray[i].name === name){
+            if (matArray[i].name === name) {
                 matArray.splice(i, 1);
                 console.log('item removed');
                 return;
@@ -90,15 +90,16 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
 
     }
 
-    $scope.updateListItem = function (listID){
+    $scope.updateListItem = function (listID) {
         console.log('update function run');
         $q.when(true).then(function () {
-            $ionicLoading.show({template: 'speichert...'});
-            return listenDB.updateList($scope.list).then(function () {
-                $ionicLoading.hide();
-            });
+            $ionicLoading.show({template: 'speichert...'})
+        }).then(function () {
+            return listenDB.updateList($scope.list);
+        }).then(function () {
+            $ionicLoading.hide();
         });
-        }
+    }
 
 });
 
