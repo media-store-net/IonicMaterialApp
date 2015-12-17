@@ -189,7 +189,39 @@ app.factory('IndexedDB', function ($q) {
 
             // Settings auslesen
             getSettings: function () {
+                var defer = $q.defer();
 
+                //defer async result
+                var result = [];
+
+                // Transaction auswählen
+                var trans = myDB.transaction([dbName], 'readonly');
+                // ObejectStore auswählen
+                var objectStore = trans.objectStore(dbName);
+                // Cursor für alle Einträge von 0 bis zum Ende
+                var range = IDBKeyRange.lowerBound(0);
+                var cursorRequest = objectStore.openCursor(range);
+
+                cursorRequest.onsuccess = function (event) {
+                    var cursorResult = event.target.result;
+
+                    if (!cursorResult) { //auflöse promise, wenn cursor am Ende, oder wenn es nicht existiert
+                        defer.resolve(result); //listResult ist dann in then-Methode verfügbar
+                    } else {
+
+                        result.push(cursorResult.value)
+
+                        // Cursor zum nächsten Eintrag bewegen
+                        cursorResult.continue();
+                    }
+                }
+
+                cursorRequest.onerror = function (event) {
+                    console.log(event);
+                    defer.reject('error occurs on cursorRequest');
+                }
+
+                return defer.promise;
             },
 
             // Settings speichern

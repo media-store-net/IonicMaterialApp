@@ -104,16 +104,28 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
 });
 
 //Settings controller
-app.controller('settingsCtrl', function ($q, $scope, $ionicLoading, settingsDB, initSettings, AuthService) {
+app.controller('settingsCtrl', function ($q, $scope, $state, settingsDB, initSettings, AuthService) {
+    // Handling User AuthService
     $scope.user = AuthService;
-    $scope.settings = initSettings.getSettings();
-    $scope.viewSettingsForm = false;
 
-    if(!$scope.settings){
-        $scope.viewSettingsForm = true;
-    }
+    // Handling SettingsForm and SettingsDB
+    $scope.viewSettingsForm = true;
+    var settings = $q.when(initSettings.getSettings());
+
+    settings.then(function () {
+        $scope.settings = settings.$$state.value[0];
+        if($scope.settings){
+            $scope.viewSettingsForm = false;
+        }
+    });
+
     $scope.putSettings = function (FormData) {
-        initSettings.saveSettings(1,FormData.name, FormData.vorname, FormData.kfz, FormData.email);
+        initSettings.saveSettings(1,FormData.name, FormData.vorname, FormData.kfz, FormData.email)
+            .then(function () {
+                $scope.viewSettingsForm = false;
+            }).then(function () {
+                $state.go('home');
+            });
     }
 
 
