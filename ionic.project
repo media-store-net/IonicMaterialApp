@@ -1,5 +1,5 @@
 {
-  "name": "testapp",
+  "name": "Material-App",
   "app_id": "f81ebff9",
   "gulpStartupTasks": [
     "sass",
