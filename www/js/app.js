@@ -1,6 +1,7 @@
 (function () {
     var app = angular.module('webapp', [
-    'ionic','ionic.service.core',
+    'ionic',
+    //'ionic.service.core',
     'webapp.controllers',
     'webapp.services'
     ]);
@@ -21,7 +22,7 @@
         // Templates //
         $stateProvider.state('home', {
             url: '/',
-            templateUrl: '/templates/home.html'
+            templateUrl: 'templates/home.html'
         });
 
         $stateProvider.state('listen', {
