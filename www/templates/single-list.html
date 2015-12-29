@@ -1,7 +1,7 @@
 <ion-view view-title="{{list.title}}">
     <ion-content class="padding">
-        <ion-list class="card">
-            <ion-item ng-repeat="mat in list.mat">
+        <ion-list class="card" keyboard-attach>
+            <ion-item ng-repeat="mat in list.mat | orderBy: 'name'">
                 <h3 class="dark">{{mat.name}}
                 <span class="badge badge-calm">{{mat.anzahl}}</span>
                 </h3>
@@ -36,12 +36,12 @@
                     <div class="row list">
                         <div class="col col-75">
                             <div class="item range range-positive">
-                                <i class="icon ion-minus-round"></i>
+                                <i class="icon ion-minus-round" ng-model="formData.anzahl" ng-click="countQuantity(formData, 'minus')"></i>
                                 <input type="range" name="matAnzahl"
                                        ng-model="formData.anzahl"
                                        ng-required="true"
                                        min="0" max="50" value="10">
-                                <i class="icon ion-plus-round"></i>
+                                <i class="icon ion-plus-round" ng-model="formData.anzahl" ng-click="countQuantity(formData, 'plus')"></i>
                             </div>
                         </div>
                         <div class="col col-25">

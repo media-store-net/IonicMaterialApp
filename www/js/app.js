@@ -1,7 +1,7 @@
 (function () {
     var app = angular.module('webapp', [
     'ionic',
-    //'ionic.service.core',
+    'ionic.service.core',
     'webapp.controllers',
     'webapp.services'
     ]);

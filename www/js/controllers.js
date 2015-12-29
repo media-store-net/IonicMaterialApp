@@ -43,7 +43,7 @@ app.controller('listenCtrl', function ($q, $scope, $ionicLoading, listenDB, init
 });
 
 //Single view controller
-app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listenDB, selectedList) {
+app.controller('singleCtrl', function ($q, $scope, $state, $ionicPopup, $timeout, listenDB, selectedList) {
     console.log('selectedList elements on controller creation', selectedList);
     $scope.list = selectedList;
     $scope.itemCache = {}; // wird nur zum kopieren und pushen verwendet
@@ -64,6 +64,7 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
         'Zink-Spray',
         'RostOff'
     ];
+
 
     $scope.addListMat = function (matForm, formData) {
         if (matForm.$valid) {
@@ -93,12 +94,36 @@ app.controller('singleCtrl', function ($q, $scope, $state, $ionicLoading, listen
     $scope.updateListItem = function (listID) {
         console.log('update function run');
         $q.when(true).then(function () {
-            $ionicLoading.show({template: 'speichert...'})
-        }).then(function () {
             return listenDB.updateList($scope.list);
         }).then(function () {
-            $ionicLoading.hide();
+            var saveInfo = $ionicPopup.show({
+                template: '<h4 class="dark">Einträge gespeichert...</h4>',
+                buttons: [
+                    { text: 'Cancel' }
+                ]
+            });
+
+            saveInfo.then(function(res) {
+                console.log('Tapped!', res);
+            });
+
+            $timeout(function () {
+                saveInfo.close();
+            }, 2000);
         });
+    }
+
+    $scope.countQuantity = function (data, sign) {
+
+        if(sign === 'minus') {
+            data.anzahl = Math.abs(parseInt(data.anzahl) - 1);
+        }
+
+        else if (sign === 'plus'){
+            data.anzahl = Math.abs(parseInt(data.anzahl) + 1);
+        }
+        console.log(data.anzahl);
+        return data;
     }
 
 });
