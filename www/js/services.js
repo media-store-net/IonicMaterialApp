@@ -267,6 +267,21 @@ app.factory('AuthService', function ($http, $q) {
     var user = {};
     user.uid = false;
 
+    var url= 'http://demo.wp-api.org/wp-json/wp/v2/users/';
+
+    $http({
+        url: url,
+        method: 'get'
+    }).then(function successCallback(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        console.log(response);
+    }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        console.log('Error: ' + response);
+    });
+
     return {
         user: user
     }
